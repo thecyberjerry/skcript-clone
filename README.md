@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Skcript Clone
 
-## Getting Started
+Skcript Clone is a Next.js-based web application that integrates various features and utilizes technologies like React, React Query, and Tailwind CSS. This README will guide you through the steps to set up, install, and run the project.
 
-First, run the development server:
+## Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Before you begin, ensure you have the following installed:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Node.js** (LTS version recommended)
+- **npm** (Node package manager) or **yarn**
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+If you don't have Node.js installed, you can download it from the [official website](https://nodejs.org/).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+Follow these steps to get the development environment set up:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone the repository** to your local machine:
+   ```bash
+   git clone https://github.com/thecyberjerry/skcript-clone
+   ```
+2. Install dependencies Navigate into the project directory and install the required dependencies using either npm or yarn:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
+   cd featureos
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ### or
 
-## Deploy on Vercel
+   ```
+   yarn install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Run the development server To start the Next.js development server, run the following command:
+   ```
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### or
+
+4. If you are using Yarn
+   ```
+   yarn dev
+   ```
+5. Open the project in your browser The project will be available at http://localhost:3000 by default.
+
+## Technologies Used
+
+- Next.js: A React framework for server-side rendering and static site generation.
+
+* React: JavaScript library for building user interfaces.
+
+* TailwindCSS: A utility-first CSS framework.
+
+* React Query: A library for data fetching and state management.
+
+* NextAuth: Authentication for Next.js applications.
+
+* React DnD: A drag-and-drop library for React.
