@@ -1,20 +1,22 @@
+"use client";
 import Image from "next/image";
 import React from "react";
-
+import { useSession, signIn, signOut } from "next-auth/react";
 /**
- * Navbar component renders a navigation bar with a logo, 
+ * Navbar component renders a navigation bar with a logo,
  * and buttons for authentication actions (Sign In and Sign Up) [Dummy].
  * It uses the Button component to render the authentication buttons.
- * 
+ *
  * @component
  * @example
  * return (
  *   <Navbar />
  * )
- * 
+ *
  * @returns {JSX.Element} The rendered Navbar component.
  */
 export default function Navbar() {
+  const { data, status } = useSession();
   return (
     <div className="flex justify-between">
       <div className="flex items-center gap-1">
@@ -28,20 +30,54 @@ export default function Navbar() {
         />
         <p className="font-bold">FeatureOS</p>
       </div>
-      <div className="flex gap-2">
-        <Button title={"Sign in"} />
-        <Button
-          title={"Sign Up"}
-          bgColor={"hsl(241.379 100.000% 65.882%)"}
-          isBorder={"White"}
-        />
+      <div className="flex gap-2 items-center">
+        {status === "authenticated" &&
+        data &&
+        data?.user &&
+        data?.user?.email ? (
+          data?.user?.name ? (
+            <div className="flex items-center gap-2">
+              {data?.user?.image && (
+                <img
+                  src={data?.user?.image}
+                  width={30}
+                  className="rounded-full"
+                />
+              )}
+              <span className="cursor-pointer">{data?.user?.name}</span>
+            </div>
+          ) : (
+            <div>
+              <img src={data?.user?.image} />
+              {data?.user?.email.split("@")[0]}
+            </div>
+          )
+        ) : (
+          <Button title={"Sign in"} callBackFunc={signIn} />
+        )}
+        {status === "authenticated" && data && data?.user && (
+          <Button
+            title={"Sign Out"}
+            bgColor={"hsl(241.379 100.000% 65.882%)"}
+            isBorder={"White"}
+            callBackFunc={signOut}
+          />
+        )}
+        {status === "unauthenticated" && (
+          <Button
+            title={"Sign Up"}
+            bgColor={"hsl(241.379 100.000% 65.882%)"}
+            isBorder={"White"}
+            callBackFunc={signIn}
+          />
+        )}
       </div>
     </div>
   );
 }
 
 /**
- * Button component renders a customizable button that can include a title, background color, 
+ * Button component renders a customizable button that can include a title, background color,
  * border style, and an optional icon. It is used in the Navbar component to display authentication buttons.
  *
  * @param {Object} props - The properties to customize the button.
@@ -57,9 +93,11 @@ export default function Navbar() {
  *
  * @returns {JSX.Element} The rendered Button component.
  */
-export function Button({ title, bgColor, isBorder, icon }) {
+
+export function Button({ title, bgColor, isBorder, icon, callBackFunc }) {
   return (
     <button
+      onClick={() => callBackFunc()}
       className={`px-3 gap-1 h-[29px] hover:cursor-pointer rounded-md text-xs flex items-center justify-center whitespace-nowrap ${
         !isBorder && "border-[0.1px] border-gray-300"
       }`}

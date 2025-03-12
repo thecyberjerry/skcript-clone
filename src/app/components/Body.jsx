@@ -1,10 +1,12 @@
 "use client";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useRef } from "react";
 import { dropArrow, Sublist } from "./Subnav";
 import { Bodydata } from "../page";
 import { Minimodal, Modal } from "./Modal";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { signIn, useSession } from "next-auth/react";
+import { Button } from "./Navbar";
 const tag = (
   <span className="">
     <svg
@@ -34,6 +36,7 @@ export const ItemTypes = {
  */
 export const Modalcontext = createContext();
 export default function Body() {
+  const { data, status } = useSession();
   const [isOpen, setIsOpen] = React.useState(false);
   const [modalData, setModalData] = React.useState("");
   const openModal = () => setIsOpen(true);
@@ -42,7 +45,15 @@ export default function Body() {
   return (
     <React.Fragment>
       <Modalcontext.Provider
-        value={{ openModal, setIsOpen, isOpen, closeModal, setModalData }}
+        value={{
+          openModal,
+          setIsOpen,
+          isOpen,
+          closeModal,
+          setModalData,
+          data,
+          status,
+        }}
       >
         <Modal modalData={modalData} />
         <Titleofbody list={listData} />
@@ -186,25 +197,82 @@ export function Dropdown({ title, list }) {
  * return <Singlecard card={cardData} />
  */
 export function Singlecard({ card }) {
-  const { openModal, setModalData } = useContext(Modalcontext);
+  const [isMiniModal, setIsMiniModal] = React.useState(false);
+  const { openModal, setModalData, status } = useContext(Modalcontext);
+  const statusRef = useRef(status);
+
+  React.useEffect(() => {
+    statusRef.current = status;
+  }, [status]);
+
+  function Verifysession() {
+    if (status === "authenticated") {
+      openModal();
+      setModalData(card);
+    } else if (status === "unauthenticated") {
+      setIsMiniModal(true);
+      return false;
+    }
+  }
+
   const [, drag] = useDrag(() => ({
     type: ItemTypes.CARD,
     item: { card },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
+    canDrag: () => {
+      if (statusRef.current === "authenticated") return true;
+      else if (statusRef.current === "unauthenticated") {
+        setIsMiniModal(true);
+        return false;
+      }
+    },
   }));
+
   return (
     <div
+      draggable={false}
       ref={drag}
       className="flex gap-2 border-2 bg-white p-2 rounded-md border-gray-200 mt-2"
     >
+      {isMiniModal && (
+        <Minimodal setIsClicked={setIsMiniModal} isOpen={isMiniModal}>
+          <div
+            id="popup-modal"
+            tabIndex="-1"
+            className="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full"
+          >
+            <div className="relative p-4 w-full max-w-md max-h-full">
+              <div className="relative bg-white rounded-lg shadow-sm">
+                <div className="p-4 md:p-5 text-center flex flex-col justify-center items-center">
+                  <h3 className="mb-5 text-sm font-normal">
+                    Drag and Drop is only available after signing in!
+                    <br />
+                    Please sign in first
+                  </h3>
+                  <div className="flex gap-4">
+                    <Button
+                      callBackFunc={signIn}
+                      title="Login"
+                      bgColor="white"
+                    />
+                    <Button
+                      callBackFunc={() => setIsMiniModal(false)}
+                      title="Close"
+                      isBorder="white"
+                      bgColor="hsl(241.379 100.000% 65.882%)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Minimodal>
+      )}
       <div>
         <div
-          onClick={() => {
-            openModal();
-            setModalData(card);
-          }}
+          onClick={() => Verifysession()}
           className="text-xs border-2 h-[60%] justify-center w-10 items-center flex flex-col border-gray-200 rounded-md cursor-pointer"
         >
           <div style={{ transform: "rotate(180deg)" }}>{dropArrow}</div>
@@ -214,10 +282,7 @@ export function Singlecard({ card }) {
       <div className="flex flex-col gap-2">
         <p className="text-xs font-semibold ">{card?.title}</p>
         <div
-          onClick={() => {
-            openModal();
-            setModalData(card);
-          }}
+          onClick={() => Verifysession()}
           className="cursor-pointer border-2 border-gray-200 text-gray-500 rounded-md px-2 py-[1px] text-[10px] w-fit"
         >
           {card?.type}
