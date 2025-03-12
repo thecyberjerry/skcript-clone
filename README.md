@@ -55,6 +55,4 @@ Follow these steps to get the development environment set up:
 
 * React Query: A library for data fetching and state management.
 
-* NextAuth: Authentication for Next.js applications.
-
 * React DnD: A drag-and-drop library for React.
