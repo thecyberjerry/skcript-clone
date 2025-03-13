@@ -47,7 +47,7 @@ Follow these steps to get the development environment set up:
 
 ## Technologies Used
 
-- Next.js: A React framework for server-side rendering and static site generation.
+* Next.js: A React framework for server-side rendering and static site generation.
 
 * React: JavaScript library for building user interfaces.
 
@@ -56,3 +56,5 @@ Follow these steps to get the development environment set up:
 * React Query: A library for data fetching and state management.
 
 * React DnD: A drag-and-drop library for React.
+
+* AuthJs/NextAuthJs: A come in handy NextJs authentication library.

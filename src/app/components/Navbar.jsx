@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { Minimodal } from "./Modal";
 /**
  * Navbar component renders a navigation bar with a logo,
  * and buttons for authentication actions (Sign In and Sign Up) [Dummy].
@@ -17,9 +18,51 @@ import { useSession, signIn, signOut } from "next-auth/react";
  */
 export default function Navbar() {
   const { data, status } = useSession();
+  const [isMiniModal, setIsMiniModal] = React.useState(false);
   return (
     <div className="flex justify-between">
       <div className="flex items-center gap-1">
+        <Minimodal isOpen={isMiniModal} setIsClicked={setIsMiniModal}>
+          <div className="flex items-center justify-center bg-gray-100 text-xs">
+            <div className="p-6 rounded-lg w-80">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className=" font-semibold">Sign in / Sign up</h2>
+                <button
+                  onClick={() => setIsMiniModal(false)}
+                  className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                >
+                  X
+                </button>
+              </div>
+              <button
+                onClick={() => signIn("google")}
+                className="cursor-pointer w-full py-2 mb-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center justify-center"
+              >
+                <img
+                  alt="Google logo"
+                  className="mr-2"
+                  height="20"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
+                  width="20"
+                />
+                Continue with Google
+              </button>
+              <button
+                onClick={() => signIn("github")}
+                className="cursor-pointer w-full py-2 mb-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center justify-center"
+              >
+                <img
+                  alt="Google logo"
+                  className="mr-2"
+                  height="20"
+                  src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+                  width="20"
+                />
+                Continue with GitHub
+              </button>
+            </div>
+          </div>
+        </Minimodal>
         <Image
           width={32}
           height={32}
@@ -53,7 +96,7 @@ export default function Navbar() {
             </div>
           )
         ) : (
-          <Button title={"Sign in"} callBackFunc={signIn} />
+          <Button title={"Sign in"} callBackFunc={() => setIsMiniModal(true)} />
         )}
         {status === "authenticated" && data && data?.user && (
           <Button
@@ -68,7 +111,7 @@ export default function Navbar() {
             title={"Sign Up"}
             bgColor={"hsl(241.379 100.000% 65.882%)"}
             isBorder={"White"}
-            callBackFunc={signIn}
+            callBackFunc={() => setIsMiniModal(true)}
           />
         )}
       </div>
@@ -94,10 +137,10 @@ export default function Navbar() {
  * @returns {JSX.Element} The rendered Button component.
  */
 
-export function Button({ title, bgColor, isBorder, icon, callBackFunc }) {
+export function Button({ title, bgColor, isBorder, icon, callBackFunc, args }) {
   return (
     <button
-      onClick={() => callBackFunc()}
+      onClick={() => callBackFunc(args)}
       className={`px-3 gap-1 h-[29px] hover:cursor-pointer rounded-md text-xs flex items-center justify-center whitespace-nowrap ${
         !isBorder && "border-[0.1px] border-gray-300"
       }`}
