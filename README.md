@@ -58,3 +58,36 @@ Follow these steps to get the development environment set up:
 * React DnD: A drag-and-drop library for React.
 
 * AuthJs/NextAuthJs: A come in handy NextJs authentication library.
+
+## Note 
+You will need a Google and Github; Client Id and Client Secret to run the app and add the client secret and client id code in provided format or you can edit the env file access variable names in the /src/auth/js,
+
+### Recommended Env Variables structure
+```
+AUTH_SECRET="xxxxx" 
+AUTH_GITHUB_ID="xxxx"
+AUTH_GITHUB_SECRET="xxxx"
+AUTH_GOOGLE_ID="xxxx.googleusercontent.com"
+AUTH_GOOGLE_SECRET="xxxx"
+NEXTAUTH_URL=http://localhost:3000
+AUTH_TRUST_HOST=https://localhost:3000
+```
+
+## If stuck on installation of AuthJs:
+Run these commands:
+```
+npm install next-auth@beta
+```
+```
+npx auth secret
+```
+
+---
+
+> **Project by Himanshu(thecyberjerry)**
+>
+> 📧 Contact: himanshusharma2719@gmail.com
+>
+> 🔗 GitHub: [github.com/thecyberjerry]
+>
+> 📝 Feel free to reach out for any questions!
